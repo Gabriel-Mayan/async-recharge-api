@@ -11,4 +11,4 @@ import { RechargeController } from './recharge.controller';
   imports: [TypeOrmModule.forFeature([Recharge, RechargeRepository])],
   providers: [RechargeRepository, RechargeService],
 })
-export class UsersModule {}
+export class RechargeModule {}

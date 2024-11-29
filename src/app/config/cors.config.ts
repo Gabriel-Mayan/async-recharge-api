@@ -1,7 +1,7 @@
 import { CorsOptions } from 'cors';
 
 const whitelist = [];
-const origin = process.env.MODE === 'homolog' ? true : whitelist;
+const origin = process.env.MODE !== 'production' ? true : whitelist;
 
 export const corsConfig: CorsOptions = {
   credentials: true,
