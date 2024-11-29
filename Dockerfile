@@ -4,11 +4,13 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN npm install -g yarn && yarn install
+# RUN npm install -g yarn
+RUN yarn install
 
 COPY . .
 
+RUN yarn build
+
 EXPOSE 3000
 
-CMD ["yarn", "start"]
-    
+CMD ["node", "dist/main"]
