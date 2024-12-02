@@ -15,6 +15,7 @@ services:
       - DB_DATABASE=recharge
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - FAIL_PROCCESS_CHANCE=20
     depends_on:
       - db
       - redis

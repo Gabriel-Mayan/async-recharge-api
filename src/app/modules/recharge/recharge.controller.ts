@@ -10,6 +10,7 @@ import {
 import { RechargeService } from './recharge.service';
 import { CreateRechargeDto } from './dto/create-recharge.dto';
 import { GetRechargeStatusDto } from './dto/get-recharge-status.dto';
+import { FormatPhoneNumberPipe } from 'src/common/pipes/format-phone.pipe';
 
 @Controller('api/recharge')
 export class RechargeController {
@@ -21,14 +22,17 @@ export class RechargeController {
       const result =
         await this.rechargeService.startRecharge(createRechargeDto);
 
-      return { message: 'Recarga iniciada com sucesso.', ...result };
+      return { message: 'Recarga criada com sucesso', ...result };
     } catch (error) {
       throw new BadRequestException('Erro ao processar recarga.');
     }
   }
 
   @Get('/status')
-  async getRechargeStatus(@Query() getRechargeStatusDto: GetRechargeStatusDto) {
+  async getRechargeStatus(
+    @Query(new FormatPhoneNumberPipe())
+    getRechargeStatusDto: GetRechargeStatusDto,
+  ) {
     const recharge = await this.rechargeService.findRecharge({
       user_id: getRechargeStatusDto.user_id,
       phone_number: getRechargeStatusDto.phone_number,

@@ -25,8 +25,7 @@ export class RechargeProcessor extends WorkerHost {
 
     console.log(`Processando recarga: ${recharge_id}...`);
 
-    const sucesso = Math.random() > 0.2;
-    const status = sucesso ? 'SUCCESS' : 'FAILED';
+    const status = this.rechargeService.proccessRecharge();
 
     await this.rechargeService.updateRechargeStatus({ recharge_id, status });
 

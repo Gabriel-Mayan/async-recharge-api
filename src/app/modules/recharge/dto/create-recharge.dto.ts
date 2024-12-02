@@ -3,8 +3,8 @@ import {
   IsNumber,
   IsString,
   Min,
-  Max,
   IsUUID,
+  Matches,
 } from 'class-validator';
 
 export class CreateRechargeDto {
@@ -14,12 +14,11 @@ export class CreateRechargeDto {
   user_id: string;
 
   @IsNotEmpty()
-  @Min(10, { message: 'Numero de telefone muito curto...' })
-  @Max(10, { message: 'Numero de telefone muito longo...' })
+  @Matches(/^\+\d{11,12}$/, { message: 'Número de telefone inválido.' })
   phone_number: string;
 
   @IsNotEmpty()
   @IsNumber()
-  @Min(0.01, { message: 'Recarga deve ser de no mínimo, um centavo' })
+  @Min(0.01, { message: 'Recarga deve ser de no mínimo um centavo' })
   amount: number;
 }

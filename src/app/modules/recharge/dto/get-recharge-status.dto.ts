@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, Matches } from 'class-validator';
 
 export class GetRechargeStatusDto {
   @IsNotEmpty()
@@ -7,7 +7,6 @@ export class GetRechargeStatusDto {
   user_id: string;
 
   @IsNotEmpty()
-  @Min(10, { message: 'Numero de telefone muito curto...' })
-  @Max(10, { message: 'Numero de telefone muito longo...' })
+  @Matches(/^\+\d{11,12}$/, { message: 'Número de telefone inválido...' })
   phone_number: string;
 }

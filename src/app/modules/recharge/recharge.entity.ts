@@ -12,13 +12,13 @@ export class Recharge {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'uuid' })
   user_id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 14 })
   phone_number: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
   amount: number;
 
   @Column({ default: 'PENDING' })

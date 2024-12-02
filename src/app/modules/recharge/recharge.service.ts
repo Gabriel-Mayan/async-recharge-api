@@ -52,4 +52,15 @@ export class RechargeService {
 
     return { recharge_id, ...recharge };
   }
+
+  proccessRecharge() {
+    const proccessFail = parseInt(process.env.FAIL_PROCCESS_CHANCE, 10);
+
+    const proccessFailChance =
+      proccessFail > 100 ? 100 : proccessFail < 0 ? 0 : proccessFail;
+
+    const sucesso = Math.random() > proccessFailChance / 100;
+
+    return sucesso ? 'SUCCESS' : 'FAILED';
+  }
 }
