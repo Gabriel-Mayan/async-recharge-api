@@ -1,37 +1,34 @@
 import { Queue } from 'bullmq';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 
-import { IStartRecharge, IUpdateRechargeStatus } from './recharge.interface';
+import { IUpdateRechargeStatus } from './recharge.interface';
 import { RechargeRepository } from './recharge.repository';
+import { CreateRechargeDto } from './dto/create-recharge.dto';
+import { GetRechargeStatusDto } from './dto/get-recharge-status.dto';
 
 @Injectable()
 export class RechargeService {
   constructor(
     private readonly rechargeRepository: RechargeRepository,
-    @InjectQueue('recharge') private readonly rechrgeQueue: Queue,
+    @InjectQueue('recharge') private readonly rechargeQueue: Queue,
   ) {}
 
-  async startRecharge({ user_id, phone_number, amount }: IStartRecharge) {
-    const newRecharge = await this.rechargeRepository.createRecharge({
+  async startRecharge({ user_id, phone_number, amount }: CreateRechargeDto) {
+    const { id, status } = await this.rechargeRepository.createRecharge({
       user_id,
       phone_number,
       amount,
     });
 
-    const rechargeData = {
-      recharge_id: newRecharge.id,
-      user_id,
-      phone_number,
-      amount,
+    await this.rechargeQueue.add('process-recharge', {
+      recharge_id: id,
+    });
+
+    return {
+      recharge_id: id,
+      status,
     };
-
-    await this.rechrgeQueue.add('process-recharge', rechargeData, {
-      delay: 1000,
-      attempts: 3,
-    });
-
-    return rechargeData;
   }
 
   async updateRechargeStatus({ recharge_id, status }: IUpdateRechargeStatus) {
@@ -39,5 +36,20 @@ export class RechargeService {
       recharge_id,
       status,
     });
+  }
+
+  async findRecharge({ user_id, phone_number }: GetRechargeStatusDto) {
+    const result = await this.rechargeRepository.findRechargeByUserAndPhone({
+      user_id,
+      phone_number,
+    });
+
+    if (!result) {
+      throw new BadRequestException('Recarga não encontrada...');
+    }
+
+    const { id: recharge_id, ...recharge } = result;
+
+    return { recharge_id, ...recharge };
   }
 }

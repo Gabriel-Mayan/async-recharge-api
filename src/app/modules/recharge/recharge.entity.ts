@@ -12,9 +12,6 @@ export class Recharge {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ default: 'PENDING' })
-  status: string;
-
   @Column()
   user_id: string;
 
@@ -24,12 +21,15 @@ export class Recharge {
   @Column()
   amount: number;
 
+  @Column({ default: 'PENDING' })
+  status: string;
+
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  updated_at: Date;
 
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, select: false })
+  deleted_at: Date;
 }
