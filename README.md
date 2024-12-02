@@ -1,99 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# API de Recarga Assíncrona
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto fornece uma API para gerenciar recargas de celular de forma assíncrona. Desenvolvida com **Node.js** e **TypeORM**, a aplicação se comunica com um banco de dados **MySQL** e é executada em contêineres **Docker**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologias Utilizadas
 
-## Description
+- **Node.js**: Ambiente de execução JavaScript.
+- **TypeScript**: Superset do JavaScript para tipagem estática.
+- **TypeORM**: ORM para integrar Node.js ao banco de dados MySQL.
+- **MySQL**: Banco de dados relacional para persistência de dados.
+- **Redis**: Banco de dados em memória (usado para cache ou filas).
+- **Docker**: Plataforma de contêineres para facilitar a configuração do ambiente.
+- **Yarn**: Gerenciador de pacotes para o gerenciamento de dependências.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Pré-requisitos
 
-## Project setup
+Antes de rodar o projeto, é necessário ter as seguintes ferramentas instaladas:
 
-```bash
-$ yarn install
-```
+- **Yarn**: Gerenciador de pacotes.
+- **Docker** (versão >= 20.x): Para rodar os contêineres.
+- **Docker Compose** (versão >= 1.29.x): Para gerenciar os múltiplos contêineres da aplicação.
 
-## Compile and run the project
+# Executando a Aplicação com Docker
 
-```bash
-# development
-$ yarn run start
+Este projeto utiliza **Docker** e **Docker Compose** para facilitar a execução de sua aplicação em contêineres. O uso desses recursos garante que todos os serviços necessários, como a API, o banco de dados MySQL e o Redis, sejam facilmente configurados e executados.
 
-# watch mode
-$ yarn run start:dev
+## Passos para Executar a Aplicação
 
-# production mode
-$ yarn run start:prod
-```
+### 1. Construindo e Iniciando os Contêineres
 
-## Run tests
+Para construir e iniciar todos os serviços definidos no arquivo `docker-compose.yml`, execute o comando abaixo:
 
-```bash
-# unit tests
-$ yarn run test
+    docker-compose up --build
 
-# e2e tests
-$ yarn run test:e2e
+Esse comando realiza as seguintes etapas:
 
-# test coverage
-$ yarn run test:cov
-```
+- **Constrói** a imagem da aplicação Node.js.
+- **Cria** os contêineres para a API, banco de dados MySQL e Redis.
+- **Inicia** os serviços conforme as configurações no `docker-compose.yml`.
 
-## Deployment
+### 2. Variáveis de Ambiente no Docker Compose
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+No arquivo `docker-compose.yml`, as variáveis de ambiente já estão definidas para um **ambiente de teste**. Ao executar o comando `docker-compose up`, essas variáveis são automaticamente configuradas para o ambiente local, permitindo que você inicie a aplicação com as configurações corretas sem precisar modificar um arquivo `.env` manualmente.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Algumas das variáveis de ambiente configuradas são:
 
-```bash
-$ yarn install -g mau
-$ mau deploy
-```
+- **`DB_HOST`**: Definido como `db`, que é o nome do serviço MySQL no Docker Compose.
+- **`DB_PORT`**: A porta padrão do MySQL, `3306`.
+- **`DB_USERNAME`** e **`DB_PASSWORD`**: Credenciais de acesso ao banco de dados.
+- **`FAIL_PROCCESS_CHANCE`**: Chance de falha configurável no processo de recarga (detalhado abaixo).
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. Acessando a Aplicação
 
-## Resources
+Após o Docker Compose iniciar os contêineres, a API estará disponível na porta **3000** do seu ambiente local. Para acessar a API, use o seguinte endereço:
 
-Check out a few resources that may come in handy when working with NestJS:
+    http://localhost:3000
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 4. Configuração da Variável `FAIL_PROCCESS_CHANCE`
 
-## Support
+A variável **`FAIL_PROCCESS_CHANCE`** controla a probabilidade de falha no processo de recarga. A cada solicitação de recarga, a API calcula aleatoriamente a chance de falha com base no valor dessa variável. O comportamento é o seguinte:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **`FAIL_PROCCESS_CHANCE=0`**: Nenhuma falha — todas as recargas serão bem-sucedidas.
+- **`FAIL_PROCCESS_CHANCE=20`**: 20% de chance de falha em cada recarga.
+- **`FAIL_PROCCESS_CHANCE=100`**: Todas as recargas falham.
 
-## Stay in touch
+Essa configuração permite testar o comportamento da API em diferentes cenários de falha.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 5. Parando os Contêineres
 
-## License
+Quando você terminar de utilizar os contêineres, pode parar e remover todos os contêineres, volumes e redes associados com o comando:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+    docker-compose down
+
+Isso remove os contêineres e outros recursos relacionados.
+
+## Considerações Finais
+
+Este projeto é uma API simples que simula o processamento de recargas de celular com uma chance de falha configurável. A utilização de Docker facilita a configuração e execução do ambiente de desenvolvimento e produção.
+
+Se você tiver dúvidas ou sugestões, sinta-se à vontade para abrir uma issue no repositório.
